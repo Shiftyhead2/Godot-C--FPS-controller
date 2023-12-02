@@ -2,8 +2,23 @@ using Godot;
 
 public partial class playerController : CharacterBody3D
 {
-	public const float SPEED = 5.0f;
+
+	public const float CROUNCHING_SPEED = 3.0f;
+
+	public const float WALKING_SPEED = 5.0f;
+	public const float RUNNING_SPEED = 8.0F;
 	public const float JUMP_VELOCITY = 4.5f;
+
+	private bool isSprinting = false;
+
+	private bool isCrouching = false;
+
+	[ExportCategory("Hold Crouch Toggle")]
+	[Export]
+	private bool TOGGLE_CROUCH = true;
+
+
+	private float current_speed;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = 9.8f;
@@ -14,6 +29,12 @@ public partial class playerController : CharacterBody3D
 	[Export]
 	private Camera3D camera;
 
+	[Export]
+	private AnimationPlayer animationPlayer;
+
+	[Export]
+	private ShapeCast3D CrouchShapeCast;
+
 	[ExportCategory("Look Variables")]
 	[Export]
 	private float Sensitivity = 0.03f;
@@ -22,14 +43,33 @@ public partial class playerController : CharacterBody3D
 
 	private Vector3 targetRotation;
 
-	[Export] private float ActualCameraRotationSpeed;
+	[Export]
+	private float ActualCameraRotationSpeed;
 
-	[ExportCategory("Head Bob Variables")]
-	[Export] private float walkBobSpeed = 14f;
-	[Export] private float walkBobAmount = 0.05f;
+	[ExportCategory("Head Bob Configuration")]
+	[ExportGroup("Head bob Variables")]
+	[ExportSubgroup("Walking variables")]
+	[Export]
+	private float walkBobSpeed = 14f;
+	[Export]
+	private float walkBobAmount = 0.05f;
+	[ExportSubgroup("Running variables")]
+	[Export]
+	private float runBobSpeed = 15f;
+	[Export]
+	private float runBobAmount = 0.065f;
+
+	[ExportSubgroup("Crouching variables")]
+	[Export]
+	private float crouchBobSpeed = 8f;
+	[Export]
+	private float crouchBobAmount = 0.025f;
 
 	private float defaultYPos = 0f;
 	private float bobTimer;
+
+	private float crouchHeadYPos = 0.485f;
+	private float standHeadYPos = 0.585f;
 
 	private Vector3 direction;
 	private Vector3 velocity;
@@ -39,7 +79,10 @@ public partial class playerController : CharacterBody3D
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 
-		defaultYPos = head.Position.Y;
+		CrouchShapeCast.AddException(this);
+
+		standHeadYPos = head.Position.Y;
+		current_speed = WALKING_SPEED;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -47,6 +90,10 @@ public partial class playerController : CharacterBody3D
 
 		velocity = Velocity;
 
+
+		defaultYPos = isCrouching ? crouchHeadYPos : standHeadYPos;
+
+		current_speed = isCrouching ? CROUNCHING_SPEED : isSprinting ? RUNNING_SPEED : WALKING_SPEED;
 
 
 		HandleInput();
@@ -66,6 +113,23 @@ public partial class playerController : CharacterBody3D
 	{
 		base._UnhandledInput(@event);
 
+		if (@event.IsActionPressed("crouch") && IsOnFloor() && TOGGLE_CROUCH)
+		{
+			HandleToggleCrouch();
+		}
+
+		if (@event.IsActionPressed("crouch") && !isCrouching && IsOnFloor() && !TOGGLE_CROUCH)
+		{
+			crouching(true);
+		}
+
+		if (@event.IsActionReleased("crouch") && !TOGGLE_CROUCH)
+		{
+			crouching(false);
+		}
+
+
+
 		if (@event is InputEventMouseMotion mouseMotion)
 		{
 			targetRotation = new Vector3(
@@ -82,6 +146,15 @@ public partial class playerController : CharacterBody3D
 		// As good practice, you should replace UI actions with custom gameplay actions.
 		inputDir = Input.GetVector("move left", "move right", "move forward", "move backwards");
 		direction = (head.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+
+		if (Input.IsActionPressed("sprint") && IsOnFloor() && !isCrouching)
+		{
+			HandleSprintInput();
+		}
+		else
+		{
+			isSprinting = false;
+		}
 	}
 
 	private void HandleGravity(float delta)
@@ -108,23 +181,20 @@ public partial class playerController : CharacterBody3D
 		{
 			if (direction != Vector3.Zero)
 			{
-				velocity.X = direction.X * SPEED;
-				velocity.Z = direction.Z * SPEED;
+				velocity.X = direction.X * current_speed;
+				velocity.Z = direction.Z * current_speed;
 			}
 			else
 			{
-				velocity.X = Mathf.Lerp(velocity.X, direction.X * SPEED, delta * 7.0f);
-				velocity.Z = Mathf.Lerp(velocity.Z, direction.Z * SPEED, delta * 7.0f);
+				velocity.X = Mathf.Lerp(velocity.X, direction.X * current_speed, delta * 7.0f);
+				velocity.Z = Mathf.Lerp(velocity.Z, direction.Z * current_speed, delta * 7.0f);
 			}
 		}
 		else
 		{
-			velocity.X = Mathf.Lerp(velocity.X, direction.X * SPEED, delta * 3.0f);
-			velocity.Z = Mathf.Lerp(velocity.Z, direction.Z * SPEED, delta * 3.0f);
+			velocity.X = Mathf.Lerp(velocity.X, direction.X * current_speed, delta * 3.0f);
+			velocity.Z = Mathf.Lerp(velocity.Z, direction.Z * current_speed, delta * 3.0f);
 		}
-
-
-
 	}
 
 	private void HandleHeadRotation(float delta)
@@ -146,23 +216,63 @@ public partial class playerController : CharacterBody3D
 
 		if (Mathf.Abs(direction.X) > 0.1f || Mathf.Abs(direction.Z) > 0.1f)
 		{
-			bobTimer += delta * walkBobSpeed;
+			bobTimer += delta * (isCrouching ? crouchBobSpeed : isSprinting ? runBobSpeed : walkBobSpeed);
 			head.Position = new Vector3(
 				head.Position.X,
-				defaultYPos + Mathf.Sin(bobTimer) * walkBobAmount,
+				defaultYPos + Mathf.Sin(bobTimer) * (isCrouching ? crouchBobAmount : isSprinting ? runBobAmount : walkBobAmount),
 				head.Position.Z);
 		}
 		else
 		{
 			ResetHeadPosition();
 		}
-
 	}
+
+
 
 
 	private void ResetHeadPosition()
 	{
 		bobTimer = 0f;
 		head.Position = new Vector3(head.Position.X, Mathf.Lerp(head.Position.Y, defaultYPos, 0.5f), head.Position.Z);
+	}
+
+	private void HandleToggleCrouch()
+	{
+		if (isCrouching && CrouchShapeCast.IsColliding() == false)
+		{
+			crouching(false);
+		}
+		else if (!isCrouching)
+		{
+			crouching(true);
+		}
+	}
+
+
+	private void crouching(bool state)
+	{
+		switch (state)
+		{
+			case true:
+				animationPlayer.Play("crouch", 0, 7.0f);
+				break;
+			case false:
+				animationPlayer.Play("crouch", 0, -7.0f, true);
+				break;
+		}
+	}
+
+	private void HandleSprintInput()
+	{
+		isSprinting = !isSprinting;
+	}
+
+	private void _on_animation_player_animation_started(string anim_name)
+	{
+		if (anim_name == "crouch")
+		{
+			isCrouching = !isCrouching;
+		}
 	}
 }

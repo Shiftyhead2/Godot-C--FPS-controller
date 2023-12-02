@@ -24,8 +24,14 @@ transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
 shadow_enabled = true
 
 [node name="Ground" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64609, 0, -1.73364)
 use_collision = true
-size = Vector3(10, 2.37718, 10)
+size = Vector3(26.3466, 2.37718, 21.1099)
+
+[node name="Ground2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.90948, 3.36053, -1.35561)
+use_collision = true
+size = Vector3(6.58447, 0.784415, 17.0206)
 
 [node name="Player" parent="." instance=ExtResource("1_pn6oy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.24174, 0)
