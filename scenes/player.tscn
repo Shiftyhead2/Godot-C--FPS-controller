@@ -1,6 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://c2r43gewhflqa"]
+[gd_scene load_steps=14 format=3 uid="uid://c2r43gewhflqa"]
 
 [ext_resource type="Script" path="res://scripts/player/playerController.cs" id="1_ksfel"]
+[ext_resource type="Script" path="res://scripts/player/lookScript.cs" id="2_u474n"]
+[ext_resource type="Script" path="res://scripts/player/PlayerStateMachine.cs" id="3_5w1uk"]
+[ext_resource type="Script" path="res://scripts/player/states/IdleState.cs" id="4_t76kv"]
+[ext_resource type="Script" path="res://scripts/player/states/WalkingState.cs" id="5_6ix0x"]
+[ext_resource type="Script" path="res://scripts/player/states/SprintingState.cs" id="6_qrf27"]
+[ext_resource type="Script" path="res://scripts/player/states/CrouchingState.cs" id="7_aqlb1"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_al6tu"]
 
@@ -92,14 +98,10 @@ _data = {
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_qiqow"]
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("head", "camera", "animationPlayer", "CrouchShapeCast")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("head", "animationPlayer")]
 script = ExtResource("1_ksfel")
 head = NodePath("head")
-camera = NodePath("head/Camera3D")
 animationPlayer = NodePath("AnimationPlayer")
-CrouchShapeCast = NodePath("ShapeCast3D")
-Sensitivity = 0.3
-ActualCameraRotationSpeed = 20.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 visible = false
@@ -108,8 +110,11 @@ mesh = SubResource("CapsuleMesh_al6tu")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_kvk6o")
 
-[node name="head" type="Node3D" parent="."]
+[node name="head" type="Node3D" parent="." node_paths=PackedStringArray("head")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58512, 0)
+script = ExtResource("2_u474n")
+head = NodePath(".")
+Sensitivity = 0.2
 
 [node name="Camera3D" type="Camera3D" parent="head"]
 
@@ -124,4 +129,20 @@ shape = SubResource("SphereShape3D_qiqow")
 target_position = Vector3(0, 0.5, 0)
 debug_shape_custom_color = Color(0, 1, 0, 1)
 
-[connection signal="animation_started" from="AnimationPlayer" to="." method="_on_animation_player_animation_started"]
+[node name="PlayerStateMachine" type="Node" parent="."]
+script = ExtResource("3_5w1uk")
+initialState = NodePath("IdleState")
+
+[node name="IdleState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("4_t76kv")
+
+[node name="WalkingState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("5_6ix0x")
+
+[node name="SprintingState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("6_qrf27")
+
+[node name="CrouchingState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("CrouchShapeCast")]
+script = ExtResource("7_aqlb1")
+CrouchShapeCast = NodePath("../../ShapeCast3D")
+crouch_speed = 7.0
