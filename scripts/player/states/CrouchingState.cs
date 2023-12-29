@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class CrouchingState : PlayerMovementState
 {
@@ -60,11 +59,11 @@ public partial class CrouchingState : PlayerMovementState
 
 			if (Player.Velocity.Length() == 0.0f)
 			{
-				EmitSignal(SignalName.TransitionState, "IdleState");
+				EmitSignal(nameof(TransitionState), "IdleState");
 			}
 			else if (Player.Velocity.Length() > 0.0f)
 			{
-				EmitSignal(SignalName.TransitionState, "WalkingState");
+				EmitSignal(nameof(TransitionState), "WalkingState");
 			}
 
 		}

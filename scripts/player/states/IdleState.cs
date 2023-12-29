@@ -38,12 +38,12 @@ public partial class IdleState : PlayerMovementState
 		{
 			if (Player.Velocity.Length() > 0.0f)
 			{
-				EmitSignal(SignalName.TransitionState, "WalkingState");
+				EmitSignal(nameof(TransitionState), "WalkingState");
 			}
 
 			if (Input.IsActionJustPressed("crouch"))
 			{
-				EmitSignal(SignalName.TransitionState, "CrouchingState");
+				EmitSignal(nameof(TransitionState), "CrouchingState");
 			}
 		}
 	}

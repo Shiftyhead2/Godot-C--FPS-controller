@@ -35,13 +35,13 @@ public partial class SprintingState : PlayerMovementState
 		{
 			if (Input.IsActionJustPressed("crouch"))
 			{
-				EmitSignal(SignalName.TransitionState, "CrouchingState");
+				EmitSignal(nameof(TransitionState), "CrouchingState");
 			}
 		}
 
 		if (Input.IsActionJustReleased("sprint"))
 		{
-			EmitSignal(SignalName.TransitionState, "WalkingState");
+			EmitSignal(nameof(TransitionState), "WalkingState");
 		}
 	}
 }
