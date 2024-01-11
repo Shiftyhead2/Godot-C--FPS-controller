@@ -32,7 +32,7 @@ public partial class PlayerStateMachine : Node
 			}
 		}
 
-		await ToSignal(Owner, "ready");
+		await ToSignal(Owner, Node.SignalName.Ready);
 		currentState = GetNode<State>(initialState);
 		currentState.Enter();
 

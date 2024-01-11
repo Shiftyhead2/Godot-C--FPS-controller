@@ -1,12 +1,18 @@
-[gd_scene load_steps=14 format=3 uid="uid://c2r43gewhflqa"]
+[gd_scene load_steps=20 format=3 uid="uid://c2r43gewhflqa"]
 
 [ext_resource type="Script" path="res://scripts/player/playerController.cs" id="1_ksfel"]
 [ext_resource type="Script" path="res://scripts/player/lookScript.cs" id="2_u474n"]
 [ext_resource type="Script" path="res://scripts/player/PlayerStateMachine.cs" id="3_5w1uk"]
 [ext_resource type="Script" path="res://scripts/player/states/IdleState.cs" id="4_t76kv"]
+[ext_resource type="Resource" uid="uid://cktx5pshidxql" path="res://resources/WalkingAndIdleMovementConfig.tres" id="5_3v6to"]
 [ext_resource type="Script" path="res://scripts/player/states/WalkingState.cs" id="5_6ix0x"]
+[ext_resource type="Resource" uid="uid://c1h2fmpybf54n" path="res://resources/WalkingAndIdleHeadBobConfig.tres" id="6_ljms1"]
 [ext_resource type="Script" path="res://scripts/player/states/SprintingState.cs" id="6_qrf27"]
 [ext_resource type="Script" path="res://scripts/player/states/CrouchingState.cs" id="7_aqlb1"]
+[ext_resource type="Resource" uid="uid://d0aujccthugfu" path="res://resources/SprintingMovementConfig.tres" id="8_4q5p1"]
+[ext_resource type="Resource" uid="uid://cr73plt1ni4br" path="res://resources/SprintingHeadBobConfig.tres" id="10_8ql86"]
+[ext_resource type="Resource" uid="uid://coeim0d0ghmc" path="res://resources/CrounchingMovementConfig.tres" id="10_pv2ql"]
+[ext_resource type="Resource" uid="uid://b35fm0x46dvi8" path="res://resources/CrouchingHeadBobConfig.tres" id="13_kj5ul"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_al6tu"]
 
@@ -135,14 +141,22 @@ initialState = NodePath("IdleState")
 
 [node name="IdleState" type="Node" parent="PlayerStateMachine"]
 script = ExtResource("4_t76kv")
+movementConfig = ExtResource("5_3v6to")
+headBobConfig = ExtResource("6_ljms1")
 
 [node name="WalkingState" type="Node" parent="PlayerStateMachine"]
 script = ExtResource("5_6ix0x")
+movementConfig = ExtResource("5_3v6to")
+headBobConfig = ExtResource("6_ljms1")
 
 [node name="SprintingState" type="Node" parent="PlayerStateMachine"]
 script = ExtResource("6_qrf27")
+movementConfig = ExtResource("8_4q5p1")
+headBobConfig = ExtResource("10_8ql86")
 
 [node name="CrouchingState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("CrouchShapeCast")]
 script = ExtResource("7_aqlb1")
 CrouchShapeCast = NodePath("../../ShapeCast3D")
 crouch_speed = 7.0
+movementConfig = ExtResource("10_pv2ql")
+headBobConfig = ExtResource("13_kj5ul")

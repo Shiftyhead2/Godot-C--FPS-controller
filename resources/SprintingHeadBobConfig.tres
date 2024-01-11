@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cr73plt1ni4br"]
+
+[ext_resource type="Script" path="res://scripts/resources/HeadBobConfig.cs" id="1_2up88"]
+
+[resource]
+script = ExtResource("1_2up88")
+BobSpeed = 15.0
+BobAmount = 0.065
+HeadYPos = 0.585

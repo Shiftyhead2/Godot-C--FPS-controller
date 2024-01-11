@@ -20,6 +20,15 @@ config/icon="res://icon.svg"
 
 project/assembly_name="Fps Controller"
 
+[file_customization]
+
+folder_colors={
+"res://levels/": "blue",
+"res://resources/": "green",
+"res://scenes/": "orange",
+"res://scripts/": "red"
+}
+
 [input]
 
 "move left"={
