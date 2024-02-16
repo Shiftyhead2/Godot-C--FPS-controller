@@ -12,7 +12,7 @@ public partial class IdleState : PlayerMovementState
 	{
 
 		Player.HandleGravity(delta);
-		Player.HandleInput(movementConfig.speed, movementConfig.Acceleration, movementConfig.Decceleration);
+		Player.HandleInput(movementConfig.Speed, movementConfig.Acceleration, movementConfig.Decceleration);
 		Player.HandleHeadBob(delta, headBobConfig.BobSpeed, headBobConfig.BobAmount);
 		Player.HandleMovement();
 

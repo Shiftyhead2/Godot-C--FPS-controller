@@ -4,11 +4,22 @@ using System;
 public partial class MovementConfig : Resource
 {
   [Export]
-  public float Acceleration = 0.1f;
+  public float Acceleration { get; set; }
 
   [Export]
-  public float Decceleration = 0.25f;
+  public float Decceleration { get; set; }
 
   [Export]
-  public float speed = 5f;
+  public float Speed { get; set; }
+
+
+  public MovementConfig() : this(0f, 0f, 0f) { }
+
+  public MovementConfig(float acceleration, float decceleration, float speed)
+  {
+    Acceleration = acceleration;
+    Decceleration = decceleration;
+    Speed = speed;
+  }
+
 }

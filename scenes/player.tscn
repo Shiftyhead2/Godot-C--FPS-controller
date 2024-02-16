@@ -157,6 +157,5 @@ headBobConfig = ExtResource("10_8ql86")
 [node name="CrouchingState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("CrouchShapeCast")]
 script = ExtResource("7_aqlb1")
 CrouchShapeCast = NodePath("../../ShapeCast3D")
-crouch_speed = 7.0
 movementConfig = ExtResource("10_pv2ql")
 headBobConfig = ExtResource("13_kj5ul")

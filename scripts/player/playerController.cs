@@ -4,11 +4,6 @@ public partial class playerController : CharacterBody3D
 {
 	public const float JUMP_VELOCITY = 4.5f;
 
-
-	[ExportCategory("Hold Crouch Toggle")]
-	[Export]
-	private bool TOGGLE_CROUCH = true;
-
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
 
