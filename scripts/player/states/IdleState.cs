@@ -3,7 +3,7 @@ using Godot;
 
 public partial class IdleState : PlayerMovementState
 {
-	public override void Enter()
+	public override void Enter(State previousState)
 	{
 		Player.defaultYPos = headBobConfig.HeadYPos;
 	}

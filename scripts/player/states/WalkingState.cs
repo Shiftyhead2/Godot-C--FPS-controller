@@ -2,7 +2,7 @@ using Godot;
 
 public partial class WalkingState : PlayerMovementState
 {
-	public override void Enter()
+	public override void Enter(State previousState)
 	{
 		Player.defaultYPos = headBobConfig.HeadYPos;
 	}

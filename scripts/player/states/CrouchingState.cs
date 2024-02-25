@@ -12,10 +12,20 @@ public partial class CrouchingState : PlayerMovementState
 
 	private bool released = false;
 
-	public override void Enter()
+	public override void Enter(State previousState)
 	{
+		Player.animationPlayer.SpeedScale = 1f;
+		if (previousState.Name != "SlidingState")
+		{
+			Player.animationPlayer.Play("crouch", -1.0f, crouch_speed);
+		}
+		else if (previousState.Name == "SlidingState")
+		{
+			Player.animationPlayer.CurrentAnimation = "crouch";
+			Player.animationPlayer.Seek(1.0, true);
+		}
 		//Player.defaultYPos = headBobConfig.HeadYPos;
-		Player.animationPlayer.Play("crouch", -1.0f, crouch_speed);
+
 	}
 
 

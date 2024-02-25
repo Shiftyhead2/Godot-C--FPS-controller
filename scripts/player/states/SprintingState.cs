@@ -3,7 +3,7 @@ using Godot;
 public partial class SprintingState : PlayerMovementState
 {
 
-	public override void Enter()
+	public override void Enter(State previousState)
 	{
 		Player.defaultYPos = headBobConfig.HeadYPos;
 	}
@@ -17,15 +17,20 @@ public partial class SprintingState : PlayerMovementState
 
 		if (Player.IsOnFloor())
 		{
-			if (Input.IsActionJustPressed("crouch"))
+			if (Input.IsActionJustPressed("crouch") && Player.Velocity.Length() > 0.0f)
 			{
-				EmitSignal(nameof(TransitionState), "CrouchingState");
+				EmitSignal(nameof(TransitionState), "SlidingState");
 			}
 		}
 
 		if (Input.IsActionJustReleased("sprint"))
 		{
 			EmitSignal(nameof(TransitionState), "WalkingState");
+		}
+
+		if (Player.Velocity.Length() == 0.0f)
+		{
+			EmitSignal(nameof(TransitionState), "IdleState");
 		}
 	}
 }

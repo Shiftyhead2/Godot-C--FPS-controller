@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://c2r43gewhflqa"]
+[gd_scene load_steps=22 format=3 uid="uid://c2r43gewhflqa"]
 
 [ext_resource type="Script" path="res://scripts/player/playerController.cs" id="1_ksfel"]
 [ext_resource type="Script" path="res://scripts/player/lookScript.cs" id="2_u474n"]
@@ -12,6 +12,8 @@
 [ext_resource type="Resource" uid="uid://d0aujccthugfu" path="res://resources/SprintingMovementConfig.tres" id="8_4q5p1"]
 [ext_resource type="Resource" uid="uid://cr73plt1ni4br" path="res://resources/SprintingHeadBobConfig.tres" id="10_8ql86"]
 [ext_resource type="Resource" uid="uid://coeim0d0ghmc" path="res://resources/CrounchingMovementConfig.tres" id="10_pv2ql"]
+[ext_resource type="Script" path="res://scripts/player/states/SlidingState.cs" id="13_6feb5"]
+[ext_resource type="Resource" uid="uid://bajwhgakfcdt4" path="res://resources/SlidingMovementConfig.tres" id="14_j8sig"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_al6tu"]
 
@@ -94,18 +96,122 @@ tracks/2/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, 0)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ShapeCast3D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.585, 0), Vector3(0, 0.485, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_a7ost"]
+resource_name = "sliding"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape3D:shape:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [2.0, 1.5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("head:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.58512, 0), Vector3(0, 0.485, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ShapeCast3D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.585, 0), Vector3(0, 0.485, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlayerStateMachine/SlidingState:speed")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [6.0, 4.0]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("PlayerStateMachine/SlidingState")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"finish"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("head/Camera3D:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.5, 3, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2tthw"]
 _data = {
 "RESET": SubResource("Animation_7inib"),
-"crouch": SubResource("Animation_0ylt4")
+"crouch": SubResource("Animation_0ylt4"),
+"sliding": SubResource("Animation_a7ost")
 }
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_qiqow"]
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("head", "animationPlayer")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("head", "camera", "animationPlayer")]
 script = ExtResource("1_ksfel")
 head = NodePath("head")
+camera = NodePath("head/Camera3D")
 animationPlayer = NodePath("AnimationPlayer")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -157,3 +263,9 @@ headBobConfig = ExtResource("10_8ql86")
 script = ExtResource("7_aqlb1")
 CrouchShapeCast = NodePath("../../ShapeCast3D")
 movementConfig = ExtResource("10_pv2ql")
+
+[node name="SlidingState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("crouchingCast")]
+script = ExtResource("13_6feb5")
+crouchingCast = NodePath("../../ShapeCast3D")
+speed = 6.0
+movementConfig = ExtResource("14_j8sig")

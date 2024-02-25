@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bajwhgakfcdt4"]
+
+[ext_resource type="Script" path="res://scripts/resources/MovementConfig.cs" id="1_visxy"]
+
+[resource]
+script = ExtResource("1_visxy")
+Acceleration = 0.1
+Decceleration = 0.25
+Speed = 6.0

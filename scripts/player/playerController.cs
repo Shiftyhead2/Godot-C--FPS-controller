@@ -12,9 +12,12 @@ public partial class playerController : CharacterBody3D
 	private Node3D head;
 
 	[Export]
+	public Camera3D camera { get; private set; }
+
+	[Export]
 	public AnimationPlayer animationPlayer;
 
-	public float defaultYPos = 0f;
+	public float defaultYPos { get; set; } = 0f;
 	private float bobTimer;
 
 	private Vector3 direction;

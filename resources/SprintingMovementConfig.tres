@@ -1,9 +1,9 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://d0aujccthugfu"]
 
-[ext_resource type="Script" path="res://scripts/resources/MovementConfig.cs" id="1_7hvab"]
+[ext_resource type="Script" path="res://scripts/resources/MovementConfig.cs" id="1_cb3aq"]
 
 [resource]
-script = ExtResource("1_7hvab")
+script = ExtResource("1_cb3aq")
 Acceleration = 0.1
 Decceleration = 0.25
 Speed = 8.0

@@ -34,7 +34,7 @@ public partial class PlayerStateMachine : Node
 
 		await ToSignal(Owner, Node.SignalName.Ready);
 		currentState = GetNode<State>(initialState);
-		currentState.Enter();
+		currentState.Enter(currentState);
 
 	}
 
@@ -57,7 +57,7 @@ public partial class PlayerStateMachine : Node
 			if (new_state != currentState)
 			{
 				currentState.Exit();
-				new_state.Enter();
+				new_state.Enter(currentState);
 				currentState = new_state;
 			}
 		}
