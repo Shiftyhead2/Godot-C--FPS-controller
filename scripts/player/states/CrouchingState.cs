@@ -9,9 +9,12 @@ public partial class CrouchingState : PlayerMovementState
 	[Export]
 	private float crouch_speed = 4.0f;
 
+
+	private bool released = false;
+
 	public override void Enter()
 	{
-		Player.defaultYPos = headBobConfig.HeadYPos;
+		//Player.defaultYPos = headBobConfig.HeadYPos;
 		Player.animationPlayer.Play("crouch", -1.0f, crouch_speed);
 	}
 
@@ -20,11 +23,16 @@ public partial class CrouchingState : PlayerMovementState
 	{
 		Player.HandleGravity(delta);
 		Player.HandleInput(movementConfig.Speed, movementConfig.Acceleration, movementConfig.Decceleration);
-		Player.HandleHeadBob(delta, headBobConfig.BobSpeed, headBobConfig.BobAmount);
+		//Player.HandleHeadBob(delta, headBobConfig.BobSpeed, headBobConfig.BobAmount);
 		Player.HandleMovement();
 
 		if (Input.IsActionJustReleased("crouch"))
 		{
+			uncrouch();
+		}
+		else if (Input.IsActionPressed("crouch") == false && released == false)
+		{
+			released = true;
 			uncrouch();
 		}
 	}
@@ -32,7 +40,7 @@ public partial class CrouchingState : PlayerMovementState
 
 	public async void uncrouch()
 	{
-		if (CrouchShapeCast.IsColliding() == false && Input.IsActionPressed("crouch") == false)
+		if (CrouchShapeCast.IsColliding() == false)
 		{
 			Player.animationPlayer.Play("crouch", -1.0, -crouch_speed * 1.5f, true);
 			if (Player.animationPlayer.IsPlaying())
@@ -55,5 +63,10 @@ public partial class CrouchingState : PlayerMovementState
 			await ToSignal(GetTree().CreateTimer(0.1), Timer.SignalName.Timeout);
 			uncrouch();
 		}
+	}
+
+	public override void Exit()
+	{
+		released = false;
 	}
 }

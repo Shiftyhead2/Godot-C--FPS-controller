@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_0nx36")
 BobSpeed = 8.0
-BobAmount = 0.003
+BobAmount = 0.03
 HeadYPos = 0.485

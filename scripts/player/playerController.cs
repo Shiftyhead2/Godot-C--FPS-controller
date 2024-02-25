@@ -86,8 +86,10 @@ public partial class playerController : CharacterBody3D
 			return;
 		}
 
+
 		if (Mathf.Abs(direction.X) > 0.1f || Mathf.Abs(direction.Z) > 0.1f)
 		{
+
 			bobTimer += delta * currentBobSpeed;
 			head.Position = new Vector3(
 				head.Position.X,
@@ -99,8 +101,6 @@ public partial class playerController : CharacterBody3D
 			ResetHeadPosition();
 		}
 	}
-
-
 
 
 	private void ResetHeadPosition()

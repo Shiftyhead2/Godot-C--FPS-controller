@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://c2r43gewhflqa"]
+[gd_scene load_steps=19 format=3 uid="uid://c2r43gewhflqa"]
 
 [ext_resource type="Script" path="res://scripts/player/playerController.cs" id="1_ksfel"]
 [ext_resource type="Script" path="res://scripts/player/lookScript.cs" id="2_u474n"]
@@ -12,7 +12,6 @@
 [ext_resource type="Resource" uid="uid://d0aujccthugfu" path="res://resources/SprintingMovementConfig.tres" id="8_4q5p1"]
 [ext_resource type="Resource" uid="uid://cr73plt1ni4br" path="res://resources/SprintingHeadBobConfig.tres" id="10_8ql86"]
 [ext_resource type="Resource" uid="uid://coeim0d0ghmc" path="res://resources/CrounchingMovementConfig.tres" id="10_pv2ql"]
-[ext_resource type="Resource" uid="uid://b35fm0x46dvi8" path="res://resources/CrouchingHeadBobConfig.tres" id="13_kj5ul"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_al6tu"]
 
@@ -158,4 +157,3 @@ headBobConfig = ExtResource("10_8ql86")
 script = ExtResource("7_aqlb1")
 CrouchShapeCast = NodePath("../../ShapeCast3D")
 movementConfig = ExtResource("10_pv2ql")
-headBobConfig = ExtResource("13_kj5ul")
