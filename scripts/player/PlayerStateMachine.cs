@@ -9,7 +9,7 @@ public partial class PlayerStateMachine : Node
 
 	private State currentState;
 
-	private Dictionary<string, State> states;
+	private Dictionary<string, State> states = new Dictionary<string, State>();
 
 
 
@@ -17,8 +17,6 @@ public partial class PlayerStateMachine : Node
 	// Called when the node enters the scene tree for the first time.
 	public override async void _Ready()
 	{
-
-		states = new Dictionary<string, State>();
 		foreach (Node child in GetChildren())
 		{
 			if (child is State s)
