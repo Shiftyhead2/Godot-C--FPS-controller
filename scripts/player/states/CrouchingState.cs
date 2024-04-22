@@ -14,15 +14,15 @@ public partial class CrouchingState : PlayerMovementState
 
 	public override void Enter(State previousState)
 	{
-		Player.animationPlayer.SpeedScale = 1f;
+		Player.AnimationPlayer.SpeedScale = 1f;
 		if (previousState.Name != "SlidingState")
 		{
-			Player.animationPlayer.Play("crouch", -1.0f, crouch_speed);
+			Player.AnimationPlayer.Play("crouch", -1.0f, crouch_speed);
 		}
 		else if (previousState.Name == "SlidingState")
 		{
-			Player.animationPlayer.CurrentAnimation = "crouch";
-			Player.animationPlayer.Seek(1.0, true);
+			Player.AnimationPlayer.CurrentAnimation = "crouch";
+			Player.AnimationPlayer.Seek(1.0, true);
 		}
 		//Player.defaultYPos = headBobConfig.HeadYPos;
 
@@ -32,11 +32,11 @@ public partial class CrouchingState : PlayerMovementState
 	public override void Update(float delta)
 	{
 		Player.HandleGravity(delta);
-		Player.HandleInput(movementConfig.Speed, movementConfig.Acceleration, movementConfig.Decceleration);
+		Player.HandleInput(MovementConfig.Speed, MovementConfig.Acceleration, MovementConfig.Decceleration);
 		//Player.HandleHeadBob(delta, headBobConfig.BobSpeed, headBobConfig.BobAmount);
 		Player.HandleMovement();
 
-		if (Input.IsActionJustReleased("crouch"))
+		if (Input.IsActionJustReleased("crouch") || !Player.CanCrouch)
 		{
 			uncrouch();
 		}
@@ -52,10 +52,10 @@ public partial class CrouchingState : PlayerMovementState
 	{
 		if (CrouchShapeCast.IsColliding() == false)
 		{
-			Player.animationPlayer.Play("crouch", -1.0, -crouch_speed * 1.5f, true);
-			if (Player.animationPlayer.IsPlaying())
+			Player.AnimationPlayer.Play("crouch", -1.0, -crouch_speed * 1.5f, true);
+			if (Player.AnimationPlayer.IsPlaying())
 			{
-				await ToSignal(Player.animationPlayer, AnimationMixer.SignalName.AnimationFinished);
+				await ToSignal(Player.AnimationPlayer, AnimationMixer.SignalName.AnimationFinished);
 			}
 
 			if (Player.Velocity.Length() == 0.0f)

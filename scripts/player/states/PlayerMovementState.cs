@@ -6,10 +6,10 @@ public partial class PlayerMovementState : State
 	protected playerController Player;
 
 	[Export]
-	protected MovementConfig movementConfig;
+	protected MovementConfig MovementConfig;
 
 	[Export]
-	protected HeadBobConfig headBobConfig;
+	protected HeadBobConfig HeadBobConfig;
 
 	// Called when the node enters the scene tree for the first time.
 	public override async void _Ready()

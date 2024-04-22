@@ -5,19 +5,19 @@ public partial class SprintingState : PlayerMovementState
 
 	public override void Enter(State previousState)
 	{
-		Player.defaultYPos = headBobConfig.HeadYPos;
+		Player.DefaultYPos = HeadBobConfig.HeadYPos;
 	}
 
 	public override void Update(float delta)
 	{
 		Player.HandleGravity(delta);
-		Player.HandleInput(movementConfig.Speed, movementConfig.Acceleration, movementConfig.Decceleration);
-		Player.HandleHeadBob(delta, headBobConfig.BobSpeed, headBobConfig.BobAmount);
+		Player.HandleInput(MovementConfig.Speed, MovementConfig.Acceleration, MovementConfig.Decceleration);
+		Player.HandleHeadBob(delta, HeadBobConfig.BobSpeed, HeadBobConfig.BobAmount);
 		Player.HandleMovement();
 
 		if (Player.IsOnFloor())
 		{
-			if (Input.IsActionJustPressed("crouch") && Player.Velocity.Length() > 0.0f)
+			if (Input.IsActionJustPressed("crouch") && Player.Velocity.Length() > 0.0f && Player.CanSlide)
 			{
 				EmitSignal(nameof(TransitionState), "SlidingState");
 			}

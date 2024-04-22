@@ -5,15 +5,15 @@ public partial class IdleState : PlayerMovementState
 {
 	public override void Enter(State previousState)
 	{
-		Player.defaultYPos = headBobConfig.HeadYPos;
+		Player.DefaultYPos = HeadBobConfig.HeadYPos;
 	}
 
 	public override void Update(float delta)
 	{
 
 		Player.HandleGravity(delta);
-		Player.HandleInput(movementConfig.Speed, movementConfig.Acceleration, movementConfig.Decceleration);
-		Player.HandleHeadBob(delta, headBobConfig.BobSpeed, headBobConfig.BobAmount);
+		Player.HandleInput(MovementConfig.Speed, MovementConfig.Acceleration, MovementConfig.Decceleration);
+		Player.HandleHeadBob(delta, HeadBobConfig.BobSpeed, HeadBobConfig.BobAmount);
 		Player.HandleMovement();
 
 		if (Player.IsOnFloor())
@@ -23,7 +23,7 @@ public partial class IdleState : PlayerMovementState
 				EmitSignal(nameof(TransitionState), "WalkingState");
 			}
 
-			if (Input.IsActionJustPressed("crouch"))
+			if (Input.IsActionJustPressed("crouch") && Player.CanCrouch)
 			{
 				EmitSignal(nameof(TransitionState), "CrouchingState");
 			}

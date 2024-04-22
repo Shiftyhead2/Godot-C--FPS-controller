@@ -5,19 +5,37 @@ public partial class playerController : CharacterBody3D
 	public const float JUMP_VELOCITY = 4.5f;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
-	public float gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
+	public float Gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
+
+	[ExportCategory("Control Properties")]
+	[Export]
+	public bool CanMove { get; private set; } = true;
+	[Export]
+	public bool CanJump { get; private set; } = true;
+	[Export]
+	public bool CanSprint { get; private set; } = true;
+
+	[Export]
+	public bool CanCrouch { get; private set; } = true;
+	[Export]
+	public bool CanHeadBob { get; private set; } = true;
+
+	[Export]
+	public bool CanSlide { get; private set; } = true;
+
+
 
 	[ExportCategory("Node References")]
 	[Export]
 	private Node3D head;
 
 	[Export]
-	public Camera3D camera { get; private set; }
+	public Camera3D Camera { get; private set; }
 
 	[Export]
-	public AnimationPlayer animationPlayer;
+	public AnimationPlayer AnimationPlayer;
 
-	public float defaultYPos { get; set; } = 0f;
+	public float DefaultYPos { get; set; } = 0f;
 	private float bobTimer;
 
 	private Vector3 direction;
@@ -27,7 +45,7 @@ public partial class playerController : CharacterBody3D
 	public override void _Ready()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
-		defaultYPos = head.Position.Y;
+		DefaultYPos = head.Position.Y;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -37,6 +55,11 @@ public partial class playerController : CharacterBody3D
 
 	public void HandleInput(float speed, float acceleration, float deceleration)
 	{
+
+		if (!CanMove)
+		{
+			return;
+		}
 
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.
@@ -61,12 +84,17 @@ public partial class playerController : CharacterBody3D
 	{
 		// Add the gravity.
 		if (!IsOnFloor())
-			velocity.Y -= gravity * delta;
+			velocity.Y -= Gravity * delta;
 	}
 
 
 	private void HandleJump()
 	{
+		if (!CanJump)
+		{
+			return;
+		}
+
 		// Handle Jump.
 		if (Input.IsActionJustPressed("jump") && IsOnFloor())
 			velocity.Y = JUMP_VELOCITY;
@@ -83,6 +111,13 @@ public partial class playerController : CharacterBody3D
 
 	public void HandleHeadBob(float delta, float currentBobSpeed, float currentBobAmount)
 	{
+
+		if (!CanHeadBob)
+		{
+			return;
+		}
+
+
 		if (!IsOnFloor())
 		{
 			ResetHeadPosition();
@@ -96,7 +131,7 @@ public partial class playerController : CharacterBody3D
 			bobTimer += delta * currentBobSpeed;
 			head.Position = new Vector3(
 				head.Position.X,
-				defaultYPos + Mathf.Sin(bobTimer) * currentBobAmount,
+				DefaultYPos + Mathf.Sin(bobTimer) * currentBobAmount,
 				head.Position.Z);
 		}
 		else
@@ -109,6 +144,6 @@ public partial class playerController : CharacterBody3D
 	private void ResetHeadPosition()
 	{
 		bobTimer = 0f;
-		head.Position = new Vector3(head.Position.X, Mathf.Lerp(head.Position.Y, defaultYPos, 0.5f), head.Position.Z);
+		head.Position = new Vector3(head.Position.X, Mathf.Lerp(head.Position.Y, DefaultYPos, 0.5f), head.Position.Z);
 	}
 }

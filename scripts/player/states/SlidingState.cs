@@ -19,9 +19,9 @@ public partial class SlidingState : PlayerMovementState
 	public override void Enter(State previousState)
 	{
 		SetTilt();
-		Player.animationPlayer.GetAnimation("sliding").TrackSetKeyValue(5, 0, Player.Velocity.Length());
-		Player.animationPlayer.SpeedScale = 1f;
-		Player.animationPlayer.Play("sliding", -1.0, slideAnimSpeed);
+		Player.AnimationPlayer.GetAnimation("sliding").TrackSetKeyValue(5, 0, Player.Velocity.Length());
+		Player.AnimationPlayer.SpeedScale = 1f;
+		Player.AnimationPlayer.Play("sliding", -1.0, slideAnimSpeed);
 	}
 
 	public override void Update(float delta)
@@ -34,13 +34,13 @@ public partial class SlidingState : PlayerMovementState
 	{
 		Vector3 tilt = Vector3.Zero;
 		tilt.Z = 0.05f;
-		Player.animationPlayer.GetAnimation("sliding").TrackSetKeyValue(6, 1, tilt);
-		Player.animationPlayer.GetAnimation("sliding").TrackSetKeyValue(6, 2, tilt);
+		Player.AnimationPlayer.GetAnimation("sliding").TrackSetKeyValue(6, 1, tilt);
+		Player.AnimationPlayer.GetAnimation("sliding").TrackSetKeyValue(6, 2, tilt);
 	}
 
 	private void finish()
 	{
-		Player.camera.Rotation = Vector3.Zero;
+		Player.Camera.Rotation = Vector3.Zero;
 		EmitSignal(nameof(TransitionState), "CrouchingState");
 	}
 }
