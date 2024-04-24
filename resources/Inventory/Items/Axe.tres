@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://d15y01tlrq15"]
+
+[ext_resource type="Script" path="res://scripts/resources/Inventory/Item/Item.cs" id="1_vxpt2"]
+
+[resource]
+script = ExtResource("1_vxpt2")
+ID = 0
+Name = "Axe"
+Description = "Usefull for chopping wood and killing creatures"
+Quantity = 1
+MaxStackSize = 1

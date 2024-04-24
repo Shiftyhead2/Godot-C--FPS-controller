@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://ljgf10dex3sb"]
+
+[ext_resource type="Script" path="res://scripts/resources/Inventory/Item/Item.cs" id="1_bhb72"]
+
+[resource]
+script = ExtResource("1_bhb72")
+ID = 1
+Name = "Apple"
+Description = "It's a yummy apple"
+Quantity = 7
+MaxStackSize = 5

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://c2r43gewhflqa"]
+[gd_scene load_steps=24 format=3 uid="uid://c2r43gewhflqa"]
 
 [ext_resource type="Script" path="res://scripts/player/playerController.cs" id="1_ksfel"]
 [ext_resource type="Script" path="res://scripts/player/lookScript.cs" id="2_u474n"]
@@ -15,6 +15,7 @@
 [ext_resource type="Resource" uid="uid://coeim0d0ghmc" path="res://resources/CrounchingMovementConfig.tres" id="10_pv2ql"]
 [ext_resource type="Script" path="res://scripts/player/states/SlidingState.cs" id="13_6feb5"]
 [ext_resource type="Resource" uid="uid://bajwhgakfcdt4" path="res://resources/SlidingMovementConfig.tres" id="14_j8sig"]
+[ext_resource type="Script" path="res://scripts/Inventory/Inventory.cs" id="16_ft07d"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_al6tu"]
 
@@ -295,3 +296,8 @@ script = ExtResource("13_6feb5")
 crouchingCast = NodePath("../../ShapeCast3D")
 speed = 6.0
 MovementConfig = ExtResource("14_j8sig")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("16_ft07d")
+Item1StringPath = "res://resources/Inventory/Items/Axe.tres"
+Item2StringPath = "res://resources/Inventory/Items/Apple.tres"
