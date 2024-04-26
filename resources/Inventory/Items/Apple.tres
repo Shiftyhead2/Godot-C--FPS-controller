@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://ljgf10dex3sb"]
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://ljgf10dex3sb"]
 
+[ext_resource type="Texture2D" uid="uid://kg1dx8g6o5an" path="res://icon.svg" id="1_4j31k"]
 [ext_resource type="Script" path="res://scripts/resources/Inventory/Item/Item.cs" id="1_bhb72"]
 
 [resource]
@@ -7,5 +8,6 @@ script = ExtResource("1_bhb72")
 ID = 1
 Name = "Apple"
 Description = "It's a yummy apple"
+Sprite = ExtResource("1_4j31k")
 Quantity = 7
 MaxStackSize = 5

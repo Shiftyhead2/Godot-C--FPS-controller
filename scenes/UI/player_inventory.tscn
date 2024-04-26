@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://dyevs5ngu8w3c"]
+
+[ext_resource type="PackedScene" uid="uid://cxrhbo3brnkx4" path="res://scenes/UI/item_slot.tscn" id="1_bd5og"]
+[ext_resource type="Script" path="res://scripts/UI/InventoryUI.cs" id="1_mmwo8"]
+
+[node name="PlayerInventory" type="PanelContainer" node_paths=PackedStringArray("gridContainer")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mmwo8")
+ItemSlot = ExtResource("1_bd5og")
+gridContainer = NodePath("VBoxContainer/MarginContainer/GridContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="RichTextLabel" parent="VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "[center]Inventory[/center]"
+
+[node name="ExitButton" type="Button" parent="VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Exit"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 8

@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://d15y01tlrq15"]
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://d15y01tlrq15"]
 
+[ext_resource type="Texture2D" uid="uid://kg1dx8g6o5an" path="res://icon.svg" id="1_igcxs"]
 [ext_resource type="Script" path="res://scripts/resources/Inventory/Item/Item.cs" id="1_vxpt2"]
 
 [resource]
@@ -7,5 +8,6 @@ script = ExtResource("1_vxpt2")
 ID = 0
 Name = "Axe"
 Description = "Usefull for chopping wood and killing creatures"
+Sprite = ExtResource("1_igcxs")
 Quantity = 1
 MaxStackSize = 1

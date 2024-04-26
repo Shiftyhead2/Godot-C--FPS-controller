@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://8u6nldqmawv0"]
+[gd_scene load_steps=7 format=3 uid="uid://8u6nldqmawv0"]
 
 [ext_resource type="PackedScene" uid="uid://c2r43gewhflqa" path="res://scenes/player.tscn" id="1_pn6oy"]
+[ext_resource type="PackedScene" uid="uid://dyevs5ngu8w3c" path="res://scenes/UI/player_inventory.tscn" id="2_ml4em"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_68u4e"]
 
@@ -14,6 +15,31 @@ sky = SubResource("Sky_hshk4")
 [sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_q0knv"]
 
 [node name="World" type="Node3D"]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="InventoryInterface" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayerInventory" parent="UI/InventoryInterface" instance=ExtResource("2_ml4em")]
+custom_minimum_size = Vector2(556, 183)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -278.0
+offset_top = -91.5
+offset_right = 278.0
+offset_bottom = 91.5
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_8ape8")

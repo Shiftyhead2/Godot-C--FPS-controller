@@ -5,27 +5,35 @@ using System.Collections.Generic;
 public partial class Inventory : Node
 {
 
+
 	public List<ItemSlot> ItemSlots { get; private set; } = new List<ItemSlot>();
 
 	[Export]
 	public int InventorySize { get; private set; } = 24;
 
 	[Export]
-	public string Item1StringPath;
+	private string Item1StringPath;
 
 	[Export]
-	public string Item2StringPath;
+	private string Item2StringPath;
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+
 		for (int i = 0; i < InventorySize; i++)
 		{
 			ItemSlot itemSlot = new ItemSlot(null, 0);
 			ItemSlots.Add(itemSlot);
 		}
 
-		GD.Print($"Item slots: {ItemSlots.Count}");
+		if (GlobalSignalBus.instance == null)
+		{
+			GD.PrintErr($"{Name}: Error:GlobalSignalBus singleton couldn't be found!");
+		}
+		GlobalSignalBus.instance.EmitSignal(nameof(GlobalSignalBus.instance.OnInventoryUpdated), this);
+
 	}
 
 
@@ -67,11 +75,8 @@ public partial class Inventory : Node
 
 		AddItemToSlots(itemToAdd);
 
+		GlobalSignalBus.instance.EmitSignal(nameof(GlobalSignalBus.instance.OnInventoryUpdated), this);
 
-		for (int i = 0; i < ItemSlots.Count; i++)
-		{
-			GD.Print($"Slot {i}: Item: {ItemSlots[i].Item}, Current Stack Size: {ItemSlots[i].CurrentStack}");
-		}
 	}
 
 	public void AddItemToSlots(Item itemToAdd)

@@ -23,7 +23,6 @@ public class ItemSlot
 
   public int StackItem(int Quantity)
   {
-    GD.Print($"Attempting to stack an item:{Item.Name}");
     int remainingQuantity = Quantity;
     while (CurrentStack < Item.MaxStackSize && remainingQuantity > 0)
     {
