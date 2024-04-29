@@ -104,11 +104,24 @@ public partial class Inventory : Node
 
 		int remainingQuantity = itemToAdd.Quantity;
 
+		//Stacking item
 		foreach (var slot in ItemSlots.Values)
 		{
+
+			if (!itemToAdd.Stackable)
+			{
+				break;
+			}
+
+			if (remainingQuantity <= 0)
+			{
+				return;
+			}
+
+
 			if (slot.Item == null)
 			{
-				remainingQuantity = slot.AddItem(itemToAdd, remainingQuantity);
+				continue;
 			}
 
 			if (slot.Item.ID == itemToAdd.ID && slot.CurrentStack < itemToAdd.MaxStackSize)
@@ -116,12 +129,21 @@ public partial class Inventory : Node
 				remainingQuantity = slot.StackItem(remainingQuantity);
 			}
 
-			if (remainingQuantity <= 0)
-			{
-				break;
-			}
 		}
 
+		//Adding items
+		foreach (var slot in ItemSlots.Values)
+		{
+			if (remainingQuantity <= 0)
+			{
+				return;
+			}
+
+			if (slot.Item == null)
+			{
+				remainingQuantity = slot.AddItem(itemToAdd, remainingQuantity);
+			}
+		}
 	}
 
 	private void RemoveItemAtSlot(int index)

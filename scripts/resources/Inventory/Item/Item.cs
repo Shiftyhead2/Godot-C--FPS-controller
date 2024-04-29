@@ -7,6 +7,8 @@ public partial class Item : Resource
   [Export]
   public int ID { get; private set; }
   [Export]
+  public bool Stackable { get; private set; }
+  [Export]
   public string Name { get; private set; }
   [Export]
   public string Description { get; private set; }
@@ -17,11 +19,12 @@ public partial class Item : Resource
   [Export]
   public int MaxStackSize { get; private set; }
 
-  public Item() : this(0, string.Empty, string.Empty, null, 0, 0) { }
+  public Item() : this(0, false, string.Empty, string.Empty, null, 0, 0) { }
 
-  public Item(int id, string name, string description, Texture2D sprite, int quantity, int maxStackSize)
+  public Item(int id, bool stackable, string name, string description, Texture2D sprite, int quantity, int maxStackSize)
   {
     ID = id;
+    Stackable = stackable;
     Name = name;
     Description = description;
     Sprite = sprite;

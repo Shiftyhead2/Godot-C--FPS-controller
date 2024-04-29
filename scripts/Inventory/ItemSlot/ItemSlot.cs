@@ -16,8 +16,11 @@ public class ItemSlot
   public int AddItem(Item item, int Quantity)
   {
     Item = item;
-    CurrentStack += 1;
-    int remainingQuantity = Quantity - CurrentStack;
+    int availableSpace = item.MaxStackSize - CurrentStack;
+    int addedQuantity = Mathf.Min(Quantity, availableSpace);
+
+    CurrentStack += addedQuantity;
+    int remainingQuantity = Quantity - addedQuantity;
     return remainingQuantity;
   }
 

@@ -6,8 +6,9 @@
 [resource]
 script = ExtResource("1_bhb72")
 ID = 1
+Stackable = true
 Name = "Apple"
 Description = "It's a yummy apple"
 Sprite = ExtResource("1_4j31k")
-Quantity = 7
+Quantity = 10
 MaxStackSize = 5

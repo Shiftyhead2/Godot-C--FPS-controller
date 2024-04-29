@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("1_vxpt2")
 ID = 0
+Stackable = false
 Name = "Axe"
 Description = "Usefull for chopping wood and killing creatures"
 Sprite = ExtResource("1_igcxs")
