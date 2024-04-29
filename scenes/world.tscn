@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://8u6nldqmawv0"]
+[gd_scene load_steps=8 format=3 uid="uid://8u6nldqmawv0"]
 
+[ext_resource type="Script" path="res://scripts/UI/InventoryInterface.cs" id="1_boqf1"]
 [ext_resource type="PackedScene" uid="uid://c2r43gewhflqa" path="res://scenes/player.tscn" id="1_pn6oy"]
 [ext_resource type="PackedScene" uid="uid://dyevs5ngu8w3c" path="res://scenes/UI/player_inventory.tscn" id="2_ml4em"]
 
@@ -19,12 +20,14 @@ sky = SubResource("Sky_hshk4")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="InventoryInterface" type="Control" parent="UI"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_boqf1")
 
 [node name="PlayerInventory" parent="UI/InventoryInterface" instance=ExtResource("2_ml4em")]
 custom_minimum_size = Vector2(556, 183)

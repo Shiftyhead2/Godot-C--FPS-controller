@@ -6,7 +6,8 @@ public partial class Inventory : Node
 {
 
 
-	public List<ItemSlot> ItemSlots { get; private set; } = new List<ItemSlot>();
+	public Dictionary<int, ItemSlot> ItemSlots { get; private set; } = new Dictionary<int, ItemSlot>();
+
 
 	[Export]
 	public int InventorySize { get; private set; } = 24;
@@ -25,7 +26,7 @@ public partial class Inventory : Node
 		for (int i = 0; i < InventorySize; i++)
 		{
 			ItemSlot itemSlot = new ItemSlot(null, 0);
-			ItemSlots.Add(itemSlot);
+			ItemSlots[i] = itemSlot;
 		}
 
 		if (GlobalSignalBus.instance == null)
@@ -33,6 +34,7 @@ public partial class Inventory : Node
 			GD.PrintErr($"{Name}: Error:GlobalSignalBus singleton couldn't be found!");
 		}
 		GlobalSignalBus.instance.EmitSignal(nameof(GlobalSignalBus.instance.OnInventoryUpdated), this);
+		GlobalSignalBus.instance.OnInventoryInteracted += OnInventoryInteracted;
 
 	}
 
@@ -54,6 +56,12 @@ public partial class Inventory : Node
 
 	public void LoadItem(string filePath)
 	{
+		if (filePath == null || filePath == string.Empty)
+		{
+			GD.PrintErr("File path cannot be empty!");
+			return;
+		}
+
 		if (ItemSlots == null)
 		{
 			GD.PrintErr("Items slots are null for some reason!");
@@ -75,12 +83,18 @@ public partial class Inventory : Node
 
 		AddItemToSlots(itemToAdd);
 
-		GlobalSignalBus.instance.EmitSignal(nameof(GlobalSignalBus.instance.OnInventoryUpdated), this);
+		GlobalSignalBus.instance.EmitSignal(GlobalSignalBus.SignalName.OnInventoryUpdated, this);
 
 	}
 
 	public void AddItemToSlots(Item itemToAdd)
 	{
+
+		if (itemToAdd == null)
+		{
+			GD.PrintErr("For some reason this item doesn't exist!");
+			return;
+		}
 
 		if (CheckIfInventoryFull())
 		{
@@ -90,7 +104,7 @@ public partial class Inventory : Node
 
 		int remainingQuantity = itemToAdd.Quantity;
 
-		foreach (var slot in ItemSlots)
+		foreach (var slot in ItemSlots.Values)
 		{
 			if (slot.Item == null)
 			{
@@ -110,10 +124,25 @@ public partial class Inventory : Node
 
 	}
 
+	private void RemoveItemAtSlot(int index)
+	{
+		if (ItemSlots.TryGetValue(index, out ItemSlot slot))
+		{
+			if (slot.Item == null)
+			{
+				GD.Print($"Cannot remove item at slot {index} because it has no items!");
+				return;
+			}
+
+			slot.DecreaseStack();
+			GlobalSignalBus.instance.EmitSignal(GlobalSignalBus.SignalName.OnInventoryUpdated, this);
+		}
+	}
+
 	private bool CheckIfInventoryFull()
 	{
 		int emptySlots = 0;
-		foreach (var slot in ItemSlots)
+		foreach (var slot in ItemSlots.Values)
 		{
 			if (slot.Item == null || slot.CurrentStack < slot.Item.MaxStackSize)
 			{
@@ -127,5 +156,21 @@ public partial class Inventory : Node
 		}
 
 		return true;
+	}
+
+	private void OnInventoryInteracted(int index, long button_index)
+	{
+		GD.Print($"Inventory interacted. Item slot:{ItemSlots[index].Item}, mouse button: {button_index}");
+
+		switch (button_index)
+		{
+			case 1:
+				break;
+			case 2:
+				RemoveItemAtSlot(index);
+				break;
+			default:
+				break;
+		}
 	}
 }

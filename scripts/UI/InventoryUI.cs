@@ -29,16 +29,23 @@ public partial class InventoryUI : PanelContainer
 			child.QueueFree();
 		}
 
-		foreach (var slot in inventory.ItemSlots)
+		foreach (var slot in inventory.ItemSlots.Values)
 		{
 			ItemSlotUI itemSlotUI = ItemSlot.Instantiate() as ItemSlotUI;
 			gridContainer.AddChild(itemSlotUI);
+
+			itemSlotUI.ItemSlotUIInteracted += InventoryInteract;
 
 			if (slot != null)
 			{
 				itemSlotUI.SetUpItemSlotUI(slot);
 			}
 		}
+	}
+
+	private void InventoryInteract(int index, long button_index)
+	{
+		GlobalSignalBus.instance.EmitSignal(GlobalSignalBus.SignalName.OnInventoryInteracted, index, button_index);
 	}
 
 }

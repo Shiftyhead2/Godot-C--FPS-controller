@@ -33,8 +33,12 @@ public class ItemSlot
     return remainingQuantity;
   }
 
-  public void RemoveItem(Item item)
+  public void DecreaseStack()
   {
-    GD.Print($"Attempting to remove an item: {item.Name}");
+    CurrentStack = Mathf.Max(0, CurrentStack - 1);
+    if (CurrentStack <= 0)
+    {
+      Item = null;
+    }
   }
 }

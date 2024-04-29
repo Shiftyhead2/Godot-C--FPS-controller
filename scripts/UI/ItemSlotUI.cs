@@ -3,6 +3,8 @@ using System;
 
 public partial class ItemSlotUI : PanelContainer
 {
+	[Signal]
+	public delegate void ItemSlotUIInteractedEventHandler(int index, long button_index);
 
 	[Export]
 	private TextureRect itemTexture;
@@ -25,6 +27,26 @@ public partial class ItemSlotUI : PanelContainer
 		else
 		{
 			itemQuantityLabel.Visible = false;
+		}
+	}
+
+	public void OnGuiInput(InputEvent @event)
+	{
+
+		if (@event is InputEventMouseButton mouseButton)
+		{
+			if (mouseButton.IsPressed())
+			{
+				if (mouseButton.ButtonIndex == MouseButton.Left)
+				{
+					EmitSignal(SignalName.ItemSlotUIInteracted, GetIndex(), (long)mouseButton.ButtonIndex);
+				}
+				else if (mouseButton.ButtonIndex == MouseButton.Right)
+				{
+					EmitSignal(SignalName.ItemSlotUIInteracted, GetIndex(), (long)mouseButton.ButtonIndex);
+				}
+			}
+
 		}
 	}
 }
