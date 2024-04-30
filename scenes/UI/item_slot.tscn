@@ -1,16 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://cxrhbo3brnkx4"]
+[gd_scene load_steps=4 format=3 uid="uid://cxrhbo3brnkx4"]
 
+[ext_resource type="Theme" uid="uid://birojh05a6opn" path="res://Themes/ItemSlotNormal.theme" id="1_cw438"]
 [ext_resource type="Script" path="res://scripts/UI/ItemSlotUI.cs" id="1_i60km"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2iiq0"]
-bg_color = Color(0.0923971, 0.0923971, 0.092397, 1)
+[ext_resource type="Theme" uid="uid://co7yxtj7l0qu2" path="res://Themes/ItemSlotHovered.theme" id="1_mjob7"]
 
 [node name="ItemSlot" type="PanelContainer" node_paths=PackedStringArray("itemTexture", "itemQuantityLabel")]
 custom_minimum_size = Vector2(64, 64)
-theme_override_styles/panel = SubResource("StyleBoxFlat_2iiq0")
+theme = ExtResource("1_cw438")
 script = ExtResource("1_i60km")
 itemTexture = NodePath("MarginContainer/TextureRect")
 itemQuantityLabel = NodePath("Label")
+normalTheme = ExtResource("1_cw438")
+hoverTheme = ExtResource("1_mjob7")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -36,3 +37,5 @@ horizontal_alignment = 2
 vertical_alignment = 2
 
 [connection signal="gui_input" from="." to="." method="OnGuiInput"]
+[connection signal="mouse_entered" from="." to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="." to="." method="OnMouseExited"]

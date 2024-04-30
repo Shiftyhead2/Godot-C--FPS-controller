@@ -8,7 +8,7 @@ public partial class GlobalSignalBus : Node
 	[Signal]
 	public delegate void OnStartedDraggingEventHandler();
 	[Signal]
-	public delegate void OnInventoryInteractedEventHandler(int index, long button_index);
+	public delegate void OnInventoryInteractedEventHandler(int index, long button_index, bool isDoubleClick);
 
 	[Signal]
 	public delegate void OnItemSlotDraggedEventHandler(ItemSlot itemSlot, int index);

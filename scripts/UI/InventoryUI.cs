@@ -43,9 +43,9 @@ public partial class InventoryUI : PanelContainer
 		}
 	}
 
-	private void InventoryInteract(int index, long button_index)
+	private void InventoryInteract(int index, long button_index, bool isDoubleClick)
 	{
-		GlobalSignalBus.instance.EmitSignal(GlobalSignalBus.SignalName.OnInventoryInteracted, index, button_index);
+		GlobalSignalBus.instance.EmitSignal(GlobalSignalBus.SignalName.OnInventoryInteracted, index, button_index, isDoubleClick);
 	}
 
 }

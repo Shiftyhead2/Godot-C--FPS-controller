@@ -262,18 +262,18 @@ public partial class Inventory : Node
 		itemSlot1.AddDroppedItem(item2, item2Stack);
 	}
 
-	private void OnInventoryInteracted(int index, long button_index)
+	private void OnInventoryInteracted(int index, long button_index, bool isDoubleClick)
 	{
-		//GD.Print($"Inventory interacted. Item slot:{ItemSlots[index].Item}, mouse button: {button_index}");
+		GD.Print($"Inventory interacted. Item slot:{ItemSlots[index].Item}, mouse button: {button_index}, double click: {isDoubleClick}");
 
 		switch (button_index)
 		{
 			case 1:
-				if (!dragging)
+				if (!dragging && isDoubleClick)
 				{
 					StartDrag(index);
 				}
-				else
+				else if (dragging)
 				{
 					EndDrag(index);
 				}
