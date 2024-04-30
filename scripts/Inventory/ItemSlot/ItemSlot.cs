@@ -1,10 +1,11 @@
 using Godot;
-using System;
 
-public class ItemSlot
+public partial class ItemSlot : Resource
 {
   public Item Item { get; private set; }
-  public int CurrentStack { get; private set; } = 0;
+  public int CurrentStack { get; set; } = 0;
+
+  public ItemSlot() : this(null, 0) { }
 
   public ItemSlot(Item item, int stack)
   {
@@ -44,4 +45,32 @@ public class ItemSlot
       Item = null;
     }
   }
+
+  public void RemoveItem()
+  {
+    Item = null;
+    CurrentStack = 0;
+  }
+
+  public void AddDroppedItem(Item item, int stack)
+  {
+    Item = item;
+    CurrentStack = stack;
+  }
+
+  public int MergeDroppedItem(int stack)
+  {
+    int availableSpace = Item.MaxStackSize - CurrentStack;
+
+    int addedQuantity = Mathf.Min(stack, availableSpace);
+
+    CurrentStack += addedQuantity;
+
+    int remainingQuantity = stack - addedQuantity;
+
+    return remainingQuantity;
+  }
+
+
+
 }

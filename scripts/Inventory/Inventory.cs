@@ -1,11 +1,8 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class Inventory : Node
 {
-
-
 	public Dictionary<int, ItemSlot> ItemSlots { get; private set; } = new Dictionary<int, ItemSlot>();
 
 
@@ -17,6 +14,8 @@ public partial class Inventory : Node
 
 	[Export]
 	private string Item2StringPath;
+
+	private bool dragging = false;
 
 
 	// Called when the node enters the scene tree for the first time.
@@ -33,8 +32,9 @@ public partial class Inventory : Node
 		{
 			GD.PrintErr($"{Name}: Error:GlobalSignalBus singleton couldn't be found!");
 		}
-		GlobalSignalBus.instance.EmitSignal(nameof(GlobalSignalBus.instance.OnInventoryUpdated), this);
+		UpdateInventory();
 		GlobalSignalBus.instance.OnInventoryInteracted += OnInventoryInteracted;
+		GlobalSignalBus.instance.OnEndDrag += UpdateInventory;
 
 	}
 
@@ -43,12 +43,12 @@ public partial class Inventory : Node
 	{
 		base._Input(@event);
 
-		if (@event.IsActionPressed("add item1"))
+		if (@event.IsActionPressed("add item1") && !dragging)
 		{
 			LoadItem(Item1StringPath);
 		}
 
-		if (@event.IsActionPressed("add item2"))
+		if (@event.IsActionPressed("add item2") && !dragging)
 		{
 			LoadItem(Item2StringPath);
 		}
@@ -157,7 +157,7 @@ public partial class Inventory : Node
 			}
 
 			slot.DecreaseStack();
-			GlobalSignalBus.instance.EmitSignal(GlobalSignalBus.SignalName.OnInventoryUpdated, this);
+			UpdateInventory();
 		}
 	}
 
@@ -180,16 +180,109 @@ public partial class Inventory : Node
 		return true;
 	}
 
+
+	private void StartDrag(int index)
+	{
+		if (ItemSlots.TryGetValue(index, out ItemSlot slot))
+		{
+			if (slot.Item == null)
+			{
+				GD.Print("Cannot drag an empty item!");
+				dragging = false;
+				return;
+			}
+
+			GlobalSignalBus.instance.EmitSignal(GlobalSignalBus.SignalName.OnItemSlotDragged, slot, index);
+			GlobalSignalBus.instance.EmitSignal(GlobalSignalBus.SignalName.OnStartedDragging);
+			dragging = true;
+			slot.RemoveItem();
+			UpdateInventory();
+		}
+	}
+
+	private void UpdateInventory()
+	{
+		GlobalSignalBus.instance.EmitSignal(GlobalSignalBus.SignalName.OnInventoryUpdated, this);
+	}
+
+	private void EndDrag(int index)
+	{
+		ItemSlot draggedItem = GlobalSignalBus.instance.OnGetItemSlot.Invoke();
+
+		if (draggedItem == null)
+		{
+			GD.PushError($"Dragged item is empty for some reason");
+			return;
+		}
+		int draggedSlotIndex = GlobalSignalBus.instance.OnGetSlotIndex.Invoke();
+
+		if (ItemSlots.TryGetValue(index, out ItemSlot slot))
+		{
+			if (slot.Item == null)
+			{
+				slot.AddDroppedItem(draggedItem.Item, draggedItem.CurrentStack);
+
+			}
+			else
+			{
+				if (slot.Item.ID == draggedItem.Item.ID)
+				{
+					if (draggedItem.CurrentStack < slot.Item.MaxStackSize)
+					{
+						draggedItem.CurrentStack = slot.MergeDroppedItem(draggedItem.CurrentStack);
+						if (draggedItem.CurrentStack > 0)
+						{
+							ItemSlots[draggedSlotIndex].AddItem(draggedItem.Item, draggedItem.CurrentStack);
+						}
+					}
+					else
+					{
+						if (ItemSlots.TryGetValue(draggedSlotIndex, out ItemSlot draggedSlot))
+						{
+							if (draggedSlot.Item == null)
+							{
+								draggedSlot.AddItem(draggedItem.Item, draggedItem.CurrentStack);
+							}
+						}
+					}
+				}
+				else
+				{
+					SwapItems(slot, ItemSlots[draggedSlotIndex], slot.Item, draggedItem.Item, draggedItem.CurrentStack);
+				}
+			}
+		}
+		dragging = false;
+		GlobalSignalBus.instance.EmitSignal(GlobalSignalBus.SignalName.OnEndDrag);
+	}
+
+	private void SwapItems(ItemSlot itemSlot1, ItemSlot itemSlot2, Item item1, Item item2, int item2Stack)
+	{
+		itemSlot2.AddDroppedItem(item1, itemSlot1.CurrentStack);
+		itemSlot1.AddDroppedItem(item2, item2Stack);
+	}
+
 	private void OnInventoryInteracted(int index, long button_index)
 	{
-		GD.Print($"Inventory interacted. Item slot:{ItemSlots[index].Item}, mouse button: {button_index}");
+		//GD.Print($"Inventory interacted. Item slot:{ItemSlots[index].Item}, mouse button: {button_index}");
 
 		switch (button_index)
 		{
 			case 1:
+				if (!dragging)
+				{
+					StartDrag(index);
+				}
+				else
+				{
+					EndDrag(index);
+				}
 				break;
 			case 2:
-				RemoveItemAtSlot(index);
+				if (!dragging)
+				{
+					RemoveItemAtSlot(index);
+				}
 				break;
 			default:
 				break;

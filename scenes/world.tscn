@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://8u6nldqmawv0"]
+[gd_scene load_steps=9 format=3 uid="uid://8u6nldqmawv0"]
 
 [ext_resource type="Script" path="res://scripts/UI/InventoryInterface.cs" id="1_boqf1"]
 [ext_resource type="PackedScene" uid="uid://c2r43gewhflqa" path="res://scenes/player.tscn" id="1_pn6oy"]
 [ext_resource type="PackedScene" uid="uid://dyevs5ngu8w3c" path="res://scenes/UI/player_inventory.tscn" id="2_ml4em"]
+[ext_resource type="PackedScene" uid="uid://c3b3wyypv34j8" path="res://scenes/UI/drop_item_slot.tscn" id="3_6g4fd"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_68u4e"]
 
@@ -43,6 +44,10 @@ offset_right = 278.0
 offset_bottom = 91.5
 size_flags_horizontal = 4
 size_flags_vertical = 4
+
+[node name="DropSlot" parent="UI/InventoryInterface" instance=ExtResource("3_6g4fd")]
+visible = false
+layout_mode = 0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_8ape8")

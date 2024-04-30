@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://c3b3wyypv34j8"]
+
+[ext_resource type="Script" path="res://scripts/UI/DropSlotUI.cs" id="1_j8fp7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hlqjq"]
+bg_color = Color(0.0941176, 0.0941176, 0.0941176, 0.466667)
+
+[node name="DropSlot" type="PanelContainer" node_paths=PackedStringArray("itemTexture", "itemQuantityLabel")]
+custom_minimum_size = Vector2(64, 64)
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_hlqjq")
+script = ExtResource("1_j8fp7")
+itemTexture = NodePath("MarginContainer/TextureRect")
+itemQuantityLabel = NodePath("Label")
+offset = Vector2(15, 15)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+text = "x99"
+horizontal_alignment = 2
+vertical_alignment = 2

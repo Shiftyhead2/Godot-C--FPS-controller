@@ -10,5 +10,5 @@ Stackable = true
 Name = "Apple"
 Description = "It's a yummy apple"
 Sprite = ExtResource("1_4j31k")
-Quantity = 10
+Quantity = 1
 MaxStackSize = 5
