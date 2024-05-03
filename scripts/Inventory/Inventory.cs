@@ -207,14 +207,14 @@ public partial class Inventory : Node
 
 	private void EndDrag(int index)
 	{
-		ItemSlot draggedItem = GlobalSignalBus.instance.OnGetItemSlot.Invoke();
+		ItemSlot draggedItem = GlobalSignalBus.instance.OnGetItemSlot?.Invoke();
 
 		if (draggedItem == null)
 		{
 			GD.PushError($"Dragged item is empty for some reason");
 			return;
 		}
-		int draggedSlotIndex = GlobalSignalBus.instance.OnGetSlotIndex.Invoke();
+		int draggedSlotIndex = (int)GlobalSignalBus.instance.OnGetSlotIndex?.Invoke();
 
 		if (ItemSlots.TryGetValue(index, out ItemSlot slot))
 		{

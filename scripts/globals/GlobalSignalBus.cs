@@ -26,11 +26,6 @@ public partial class GlobalSignalBus : Node
 
 	public override void _Ready()
 	{
-		if (instance != null)
-		{
-			QueueFree();
-			return;
-		}
 		instance = this;
 	}
 

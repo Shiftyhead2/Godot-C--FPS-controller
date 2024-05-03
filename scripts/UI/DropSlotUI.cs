@@ -26,10 +26,15 @@ public partial class DropSlotUI : PanelContainer
 		}
 	}
 
-	public override void _ExitTree()
+	public override void _Notification(int what)
 	{
-		GlobalSignalBus.instance.OnGetItemSlot -= ReturnItemSlot;
-		GlobalSignalBus.instance.OnGetSlotIndex -= ReturnSlotIndex;
+		switch (what)
+		{
+			case (int)NotificationPredelete:
+				GlobalSignalBus.instance.OnGetItemSlot -= ReturnItemSlot;
+				GlobalSignalBus.instance.OnGetSlotIndex -= ReturnSlotIndex;
+				break;
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
